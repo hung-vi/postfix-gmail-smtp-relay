@@ -22,6 +22,12 @@ docker build -t image_name .
 docker run -d --name container_name image_name
 ```
 
+Create a container which run under a network
+```
+docker run --network=network_name -d --name container_name image_name
+```
+
+
 ## Running the tests
 1. SSH into docker container
 
@@ -44,4 +50,18 @@ This is the content
 
 ```
 tail -f 1000 /var/log/mail.log
+```
+
+5. Grant permission to send email from other containers running under the network
+Add subnet (i.e. 172.18.0.0/16) of the network to the `mynetworks` in `etc/postfix/main.cf` file
+
+Example:
+```
+mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128, 172.18.0.0/16
+```
+
+Do postfix reload
+
+```
+postfix reload
 ```
